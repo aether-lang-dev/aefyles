@@ -18,7 +18,7 @@ exports (
 )
 
 import std.collections (string_list_new, string_list_add, string_list_get, string_list_set)
-import std.list (list_new, list_add, list_free)
+import std.list (list_new, list_add_raw, list_free)
 import std.os (run_capture, aether_args_count, aether_args_get, os_getenv)
 import std.string (string_get_int)
 
@@ -67,7 +67,7 @@ cwd_set(box: ptr, value: string) {
 
 open_path(path: string) {
     av = list_new()
-    list_add(av, path)
+    list_add_raw(av, path)
     _out, _status, _err = run_capture("/usr/bin/open", av, null)
     list_free(av)
 }

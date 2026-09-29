@@ -19,7 +19,7 @@
 //
 //   ./build.sh fyles.ae && ./build/fyles [start-directory]
 
-import aether_ui
+import ui as aether_ui
 import model
 import glue
 

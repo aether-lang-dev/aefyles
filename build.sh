@@ -21,7 +21,7 @@ OUTPUT_NAME="$(basename "${2:-$(basename "$SOURCE" .ae)}")"
 OUTPUT="build/${OUTPUT_NAME}"
 C_FILE="${OUTPUT}.c"
 
-if [ ! -f "$AETHER_UI_DIR/aether_ui.ae" ]; then
+if [ ! -f "$AETHER_UI_DIR/ui/module.ae" ]; then
     echo "Error: aether-ui not found at $AETHER_UI_DIR" >&2
     echo "Set AETHER_UI_DIR to your aether-ui checkout." >&2
     exit 1
@@ -47,10 +47,12 @@ case "$OS" in
             $AETHER_INCLUDES \
             "$C_FILE" \
             "$AETHER_UI_DIR/backend/aether_ui_macos.m" \
+            "$AETHER_UI_DIR/backend/aether_ui_test_server.c" \
             "$AETHER_UI_DIR/backend/aether_ui_system_extras.c" \
             -L"$AETHER_LIB_PATH" -laether \
             -o "$OUTPUT" \
-            -framework AppKit -framework Foundation -framework QuartzCore -pthread -lm \
+            -framework AppKit -framework Foundation -framework QuartzCore \
+            -framework CoreText -framework ImageIO -framework OpenGL -pthread -lm \
             $AETHER_LIBS
         ;;
     Linux)
@@ -69,6 +71,7 @@ case "$OS" in
             $AETHER_INCLUDES $LIBNOTIFY_CFLAGS \
             "$C_FILE" \
             "$AETHER_UI_DIR/backend/aether_ui_gtk4.c" \
+            "$AETHER_UI_DIR/backend/aether_ui_test_server.c" \
             "$AETHER_UI_DIR/backend/aether_ui_system_extras.c" \
             "$AETHER_UI_DIR/backend/aether_ui_sni.c" \
             -L"$AETHER_LIB_PATH" -laether \

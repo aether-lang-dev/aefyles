@@ -48,6 +48,19 @@ model. The model never imports the UI, so it is tested with no display at all.
 
 ## Quick start
 
+Install the released toolchain with the shared, version-pinned installer
+(the same bootstrap used by selaenium):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
+  | AE_PIN=0.740.0 AEB_REF=v0.324 sh
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+This ensures `ae` 0.740.0 or newer and installs `aeb` v0.324 under
+`~/.local` (`PREFIX` overrides it), using release binaries where available.
+These bootstrap versions are separate from the project's minimum API floor.
+
 Requires the [Aether toolchain](https://github.com/aether-lang-org/aether)
 (`ae` / `aetherc`) and a checkout of
 [aether-ui](https://github.com/aether-lang-org/aether-ui) as a sibling
