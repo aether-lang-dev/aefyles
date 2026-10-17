@@ -30,7 +30,10 @@ fi
 mkdir -p build
 
 # Aether include/lib flags — works for an installed prefix or a dev tree.
-AETHER_INCLUDES="$(ae cflags 2>/dev/null | tr ' ' '\n' | grep -E '^-I' | tr '\n' ' ' || true)"
+# `ae cflags` prints its include dirs as -I plus -idirafter pairs (and -fwrapv,
+# which the generated C relies on), then the link flags. Keep every compile
+# flag: an -I-only filter drops the runtime's -idirafter dirs (aether_panic.h).
+AETHER_INCLUDES="$(ae cflags 2>/dev/null | sed -E 's/ -L.*$//' || true)"
 [ -n "$AETHER_INCLUDES" ] || AETHER_INCLUDES="-I/usr/local/include/aether/runtime -I/usr/local/include/aether/std"
 AETHER_LIB_PATH="$(ae cflags --libs 2>/dev/null | tr ' ' '\n' | grep -E '^-L' | head -1 | sed 's/^-L//' || true)"
 [ -n "$AETHER_LIB_PATH" ] || AETHER_LIB_PATH="/usr/local/lib/aether"
@@ -66,8 +69,10 @@ case "$OS" in
             LIBNOTIFY_CFLAGS="-DAEUI_HAVE_LIBNOTIFY=1 $(pkg-config --cflags libnotify)"
             LIBNOTIFY_LIBS="$(pkg-config --libs libnotify)"
         fi
+        # The GTK4 backend calls epoxy_gl* itself, and GTK4 pulling epoxy in
+        # does not put it on the link line: name it, as aether-ui's build.sh does.
         gcc -O0 -g -pipe \
-            $(pkg-config --cflags gtk4) \
+            $(pkg-config --cflags gtk4) $(pkg-config --cflags epoxy) \
             $AETHER_INCLUDES $LIBNOTIFY_CFLAGS \
             "$C_FILE" \
             "$AETHER_UI_DIR/backend/aether_ui_gtk4.c" \
@@ -76,7 +81,7 @@ case "$OS" in
             "$AETHER_UI_DIR/backend/aether_ui_sni.c" \
             -L"$AETHER_LIB_PATH" -laether \
             -o "$OUTPUT" \
-            -pthread -lm $(pkg-config --libs gtk4) $LIBNOTIFY_LIBS $AETHER_LIBS
+            -pthread -lm $(pkg-config --libs gtk4) $(pkg-config --libs epoxy) $LIBNOTIFY_LIBS $AETHER_LIBS
         ;;
     *)
         echo "Error: unsupported platform '$OS' (macOS and Linux supported here)." >&2

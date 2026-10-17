@@ -134,7 +134,7 @@ cell_label(name: string, is_dir: int) -> string {
 // these top-level functions — reached from every button's by-value-captured
 // callback — all act on the one live UI.
 
-activate(grid_cell: ptr, label_cell: ptr, cwd_cell: ptr, show_cell: ptr, target: string, is_dir: int) {
+activate(grid_cell: @keep ptr, label_cell: @keep ptr, cwd_cell: @keep ptr, show_cell: @keep ptr, target: string, is_dir: int) {
     if is_dir == 1 {
         glue.cwd_set(cwd_cell, target)
         shown = model.short_path(target, 34)
@@ -145,13 +145,13 @@ activate(grid_cell: ptr, label_cell: ptr, cwd_cell: ptr, show_cell: ptr, target:
     }
 }
 
-go_up(grid_cell: ptr, label_cell: ptr, cwd_cell: ptr, show_cell: ptr) {
+go_up(grid_cell: @keep ptr, label_cell: @keep ptr, cwd_cell: @keep ptr, show_cell: @keep ptr) {
     here = glue.cwd_get(cwd_cell)
     activate(grid_cell, label_cell, cwd_cell, show_cell, model.parent_of(here), 1)
 }
 
 // Place one entry button into the grid at flat index `slot` (row-major).
-add_cell(grid_handle: int, grid_cell: ptr, label_cell: ptr, cwd_cell: ptr, show_cell: ptr,
+add_cell(grid_handle: int, grid_cell: @keep ptr, label_cell: @keep ptr, cwd_cell: @keep ptr, show_cell: @keep ptr,
          slot: int, label: string, target: string, is_dir: int) {
     cell = aether_ui.btn(label) callback {
         activate(grid_cell, label_cell, cwd_cell, show_cell, target, is_dir)
@@ -168,7 +168,7 @@ add_cell(grid_handle: int, grid_cell: ptr, label_cell: ptr, cwd_cell: ptr, show_
 // already at the filesystem root) navigates to the parent — fyles' "(Parent)"
 // row. Everything else is whatever model.read_entries returns, in order.
 
-repaint(grid_cell: ptr, label_cell: ptr, cwd_cell: ptr, show_cell: ptr) {
+repaint(grid_cell: @keep ptr, label_cell: @keep ptr, cwd_cell: @keep ptr, show_cell: @keep ptr) {
     grid_handle = glue.cell_get(grid_cell)
     aether_ui.clear_children(grid_handle)
 
