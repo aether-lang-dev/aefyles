@@ -19,7 +19,7 @@ exports (
 
 import std.collections (string_list_new, string_list_add, string_list_get, string_list_set)
 import std.list (list_new, list_add_raw, list_free)
-import std.os (run_capture, aether_args_count, aether_args_get, os_getenv)
+import std.os (run_capture, args_count, args_get, os_getenv)
 import std.string (string_get_int)
 
 // ---- forward-reference cells -----------------------------------------
@@ -78,9 +78,9 @@ open_path(path: string) {
 // opens somewhere listable.
 
 start_dir() -> string {
-    n = aether_args_count()
+    n = args_count()
     if n > 1 {
-        return aether_args_get(1)
+        return args_get(1)
     }
     h = os_getenv("HOME")
     if h == 0 {

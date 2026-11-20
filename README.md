@@ -53,15 +53,19 @@ Install the released toolchain with the shared, version-pinned installer
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
-  | AE_PIN=0.824.0 AEB_REF=v0.324 sh
+  | AE_PIN=0.931.0 AEB_REF=v0.324 sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-This ensures `ae` 0.824.0 or newer and installs `aeb` v0.324 under
+This ensures `ae` 0.931.0 or newer and installs `aeb` v0.324 under
 `~/.local` (`PREFIX` overrides it), using release binaries where available.
 These bootstrap versions are separate from the project's minimum API floor.
-Verified with 0.824.0 (2026-10-18): `./test.sh` and `./test_app.sh` pass on
-macOS arm64 (AppKit) and on Linux arm64 and x86_64 (GTK4 under xvfb).
+Verified with 0.931.0 (2026-11-20): the model tests pass on macOS arm64 and
+Ubuntu 22.04 x86_64, the app builds on macOS (AppKit; not run there), and
+`./test_app.sh` passes on Ubuntu 22.04 x86_64 (GTK4 under xvfb). The floor
+moved to 0.931.0 with this bump: `std.path` is imported whole and `std.os`'s
+`args_count`/`args_get` replace the `aether_`-prefixed names, which later
+releases no longer export; nothing was tried on an older release.
 
 Requires the [Aether toolchain](https://github.com/aether-lang-org/aether)
 (`ae` / `aetherc`) and a checkout of

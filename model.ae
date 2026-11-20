@@ -22,7 +22,7 @@ exports (
 import std.fs (list_dir, file_stat, realpath, dir_list_count, dir_list_get, dir_list_free)
 import std.collections (string_list_new, string_list_add, string_list_get, string_list_set, string_list_size, string_list_free)
 import std.string (string_length, string_substring, string_starts_with, string_compare, string_to_lower, string_concat)
-import std.path (path_basename, path_dirname, path_join)
+import std.path
 import std.os (os_getenv)
 
 // fs.file_stat kind tags (std/fs/aether_fs.c): 1=file, 2=dir, 3=symlink, 4=other.
@@ -111,7 +111,7 @@ read_entries(path: string, show_hidden: int) -> ptr {
             }
         }
         if show == 1 {
-            full = path_join(path, name)
+            full = path.join(path, name)
             kind, _size, _mtime, _serr = file_stat(full)
             is_dir = is_dir_kind(full, kind)
             _added = string_list_add(out, entry_make(is_dir, name))
@@ -243,7 +243,7 @@ entries_at(listing: ptr, i: int) -> string {
 // The absolute path of `name` inside `dir` — what a click on that entry
 // navigates to (directory) or opens (file).
 child_path(dir: string, name: string) -> string {
-    return path_join(dir, name)
+    return path.join(dir, name)
 }
 
 // ---- Navigation arithmetic --------------------------------------------
@@ -261,14 +261,14 @@ parent_of(path: string) -> string {
     if is_root(path) == 1 {
         return "/"
     }
-    return path_dirname(path)
+    return path.dirname(path)
 }
 
 display_name(path: string) -> string {
     if is_root(path) == 1 {
         return "/"
     }
-    return path_basename(path)
+    return path.basename(path)
 }
 
 // Truncate a path to at most `max` characters for display, keeping the tail
@@ -297,5 +297,5 @@ home_dir() -> string {
 }
 
 fav_path(name: string) -> string {
-    return path_join(home_dir(), name)
+    return path.join(home_dir(), name)
 }
