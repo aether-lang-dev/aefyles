@@ -53,11 +53,11 @@ Install the released toolchain with the shared, version-pinned installer
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
-  | AE_PIN=0.931.0 AEB_REF=v0.324 sh
+  | AE_PIN=0.931.0 AEB_REF=v0.347 sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-This ensures `ae` 0.931.0 or newer and installs `aeb` v0.324 under
+This ensures `ae` 0.931.0 or newer and installs `aeb` v0.347 under
 `~/.local` (`PREFIX` overrides it), using release binaries where available.
 These bootstrap versions are separate from the project's minimum API floor.
 Verified with 0.931.0 (2026-11-20): the model tests pass on macOS arm64 and
