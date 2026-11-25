@@ -53,7 +53,7 @@ Install the released toolchain with the shared, version-pinned installer
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
-  | AE_PIN=0.945.0 AEB_REF=v0.347 sh
+  | AE_PIN=0.946.0 AEB_REF=v0.347 sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
